@@ -38,8 +38,7 @@ class Form extends Component {
         return (
             <div className="container">
                 <Button
-                    className="buttonAll"
-                    className={ this.state.isAllButtonSelected ? "selected" : "" }
+                    className={ this.state.isAllButtonSelected ? "buttonAll selected" : "buttonAll" }
                     id="All"
                     text=""
                     onClick={ event => this.handleAllButtonClick(event) }
