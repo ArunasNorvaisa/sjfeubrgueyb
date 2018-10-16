@@ -27,7 +27,7 @@ class Form extends Component {
             isAllButtonSelected: false
         });
         document.getElementById(`${event.currentTarget.id}`).classList.toggle("selected");
-        const selectedButtons = document.getElementsByClassName("selected");
+        const selectedButtons = document.getElementsByClassName("buttonNonAll selected");
         if(selectedButtons.length === 0) {
             this.setState({
                 isAllButtonSelected: true
