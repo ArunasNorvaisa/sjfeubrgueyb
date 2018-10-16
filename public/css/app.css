@@ -2,6 +2,7 @@ html {
     padding: 0;
     width: 100%;
     height: 100%;
+    font-family: 'Arimo', sans-serif;
 }
 
 .container {
@@ -9,12 +10,12 @@ html {
 }
 
 button {
-    margin: 10px;
+    margin: 2px;
     text-align: center;
     height: 30px;
     border: 1px solid #D9E1E8;
     border-radius: 2px;
-    color: 000;
+    color: #000;
     background-color: #fff;
 }
 
@@ -28,12 +29,13 @@ button span {
 }
 
 .buttonText {
-    font-weight: bold;
+    font-weight: 700;
     font-size: 13px;
     line-height: 16px;
 }
 
 .buttonAmount {
+    font-weight: 400;
     text-align: right;
     font-size: 12px;
     line-height: 14px;

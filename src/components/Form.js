@@ -40,7 +40,6 @@ class Form extends Component {
                 <Button
                     className={ this.state.isAllButtonSelected ? "buttonAll selected" : "buttonAll" }
                     id="All"
-                    text=""
                     onClick={ event => this.handleAllButtonClick(event) }
                 />
                 <Button
