@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from './Button';
+import ButtonMore from './ButtonMore';
 
 class Form extends Component {
 
@@ -72,6 +73,7 @@ class Form extends Component {
                     amount="$649+"
                     onClick={ event => this.handleButtonClick(event) }
                 />
+                <ButtonMore />
             </div>
         );
     }
