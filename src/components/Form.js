@@ -3,79 +3,82 @@ import Button from './Button';
 import ButtonMore from './ButtonMore';
 
 class Form extends Component {
+    state = {
+        options: [
+            { amount: '$422+', text: 'Small', selected: false },
+            { amount: '$433+', text: 'Medium', selected: false },
+            { amount: '$422+', text: 'Large', selected: false },
+            { amount: '$525+', text: 'SUV', selected: false },
+            { amount: '$649+', text: 'Van', selected: false },
+            { amount: '$594', text: 'Pickup Truck', selected: false },
+            { amount: '$626', text: 'Luxury', selected: false },
+            { amount: '$1248', text: 'Commercial', selected: false },
+            { amount: '$1607', text: 'Convertible', selected: false },
+        ]
+    }
 
-        state = {
-            isAllButtonSelected: true
-        }
+    // This is how many buttons you would like to have displayed onscreen.
+    // Hardcoded in this particular case, but can be changed dynamically
+    // depending on the user's viewport. Can be even some constant + dynamic
+    // value if you would like some buttons displayed no matter what. :)
+    buttonsOnScreen = 5;
 
     handleAllButtonClick = event => {
         event.preventDefault();
-        this.setState({
-            isAllButtonSelected: true
+
+        // We are going through every option.selected and making it false
+        this.setState(prevState => {
+            const options = prevState.options.map(option => {
+                return { ...option, selected: false };
+            });
+
+            return { options: options };
         });
-        const selectedButtons = document.getElementsByClassName("buttonNonAll");
-        for(let i = 0; i < selectedButtons.length; i++) {
-            if(selectedButtons[i].classList.contains("selected")) {
-                selectedButtons[i].classList.remove("selected");
-            }
-        }
     }
 
-    handleButtonClick = event => {
+    // Handles every button click, except ALL
+    handleButtonClick = (index, event) => {
         event.preventDefault();
-        this.setState({
-            isAllButtonSelected: false
+
+        // (Un)selecting the button
+        this.setState(prevState => {
+            let options = [...prevState.options];
+            options[index] = { ...options[index], selected: !options[index].selected };
+
+            return { options };
         });
-        document.getElementById(`${event.currentTarget.id}`).classList.toggle("selected");
-        const selectedButtons = document.getElementsByClassName("buttonNonAll selected");
-        if(selectedButtons.length === 0) {
-            this.setState({
-                isAllButtonSelected: true
-            });
-        }
     }
 
     render() {
-        return (
-            <div className="container">
-                <Button
-                    className={ this.state.isAllButtonSelected ? "buttonAll selected" : "buttonAll" }
-                    id="All"
-                    onClick={ event => this.handleAllButtonClick(event) }
-                />
-                <Button
-                    id="Small"
-                    className="buttonNonAll"
-                    amount="$422+"
-                    onClick={ event => this.handleButtonClick(event) }
-                />
-                <Button
-                    id="Medium"
-                    className="buttonNonAll"
-                    amount="$433+"
-                    onClick={ event => this.handleButtonClick(event) }
-                />
-                <Button
-                    id="Large"
-                    className="buttonNonAll"
-                    amount="$456+"
-                    onClick={ event => this.handleButtonClick(event) }
-                />
-                <Button
-                    id="SUV"
-                    className="buttonNonAll"
-                    amount="$525+"
-                    onClick={ event => this.handleButtonClick(event) }
-                />
-                <Button
-                    id="Van"
-                    className="buttonNonAll"
-                    amount="$649+"
-                    onClick={ event => this.handleButtonClick(event) }
-                />
-                <ButtonMore />
-            </div>
-        );
+        const { options } = this.state;
+
+        const isAllButtonSelected = options.every(option => !option.selected);
+
+        return <div className="container">
+            <Button
+                id="All"
+                selected={ isAllButtonSelected }
+                onClick={ this.handleAllButtonClick.bind(this) }
+            />
+
+            {
+                options.slice(0, this.buttonsOnScreen).map((option, index) => {
+                    return <Button
+                        key={ index }
+                        id={ option.text }
+                        selected={ option.selected }
+                        amount={ option.amount }
+                        onClick={ this.handleButtonClick.bind(this, index) }
+                    />;
+                })
+            }
+
+            <ButtonMore
+                /* # of checkboxes inside MORE button */
+                options={ options.slice(this.buttonsOnScreen) }
+                handleClick={ (index, event) => { this.handleButtonClick(index + this.buttonsOnScreen, event) } }
+            />
+        </div>;
     }
 }
 

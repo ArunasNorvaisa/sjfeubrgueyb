@@ -6,63 +6,68 @@ class ButtonMore extends Component {
         dropdownVisible: false
     }
 
-    handleMoreButtonClick = () => {
-        if (!this.state.dropdownVisible) {
-          document.addEventListener('click', this.handleOutsideClick, false);
-        } else {
-          document.removeEventListener('click', this.handleOutsideClick, false);
-        }
-        this.setState(prevState => ({
-           dropdownVisible: !prevState.dropdownVisible
-        }));
-        document.getElementById("buttonMore").classList.toggle("selected");
-        document.getElementById("dropMenu").classList.toggle("showMenu");
-      }
+    handleDropdown = () => {
+        this.setState(prevState => {
+            if (!prevState.dropdownVisible) {
+                document.addEventListener('click', this.handleOutsideClick, false);
+            } else {
+                document.removeEventListener('click', this.handleOutsideClick, false);
+            }
+            return { dropdownVisible: !prevState.dropdownVisible };
+        });
+    }
 
-      handleOutsideClick = event => {
+    handleOutsideClick = event => {
         if (this.node.contains(event.target)) {
-          return;
+            return;
         }
-        this.handleMoreButtonClick();
-      }
+        this.handleDropdown();
+    }
 
     render() {
-        return (
-            <span id="dropdownMenu" ref={node => { this.node = node; }}>
-                <button id="buttonMore" onClick={ this.handleMoreButtonClick }>
-                    <span className="buttonText">More</span>
-                    <span className="buttonIcon">
-                        <i className={ this.state.dropdownVisible ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
-                        </i>
-                    </span>
-                </button>
-                <div class="menuContent" id="dropMenu">
-                    <input type="checkbox" id="box-1" />
-                    <label for="box-1">
-                        <span className="dropdownText">Pickup truck</span>
-                        <span className="dropdownAmount">$594</span>
-                    </label>
+        const { options, handleClick } = this.props;
+        const { dropdownVisible } = this.state;
 
-                    <input type="checkbox" id="box-2" />
-                    <label for="box-2">
-                        <span className="dropdownText">Luxury</span>
-                        <span className="dropdownAmount">$626</span>
-                    </label>
+        let menuContentClass = 'menuContent';
+        if (dropdownVisible) { menuContentClass += ' showMenu'; }
 
-                    <input type="checkbox" id="box-3" />
-                    <label for="box-3">
-                        <span className="dropdownText">Commercial</span>
-                        <span className="dropdownAmount">$1248</span>
-                    </label>
+        const anyOptionSelected = options.some(option => option.selected);
+        const buttonMoreSelected = dropdownVisible || anyOptionSelected;
 
-                    <input type="checkbox" id="box-4" />
-                    <label for="box-4">
-                        <span className="dropdownText">Convertible</span>
-                        <span className="dropdownAmount">$1607</span>
-                    </label>
-                </div>
+        return <span id="dropdownMenu" ref={node => { this.node = node; }}>
+            <button
+                id="buttonMore"
+                onClick={ this.handleDropdown }
+                className={ buttonMoreSelected ? 'selected' : ''}
+            >
+            <span className="buttonText">More</span>
+            <span className="buttonIcon">
+                <i className={ dropdownVisible ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
+                </i>
             </span>
-        );
+            </button>
+
+            <div className={ menuContentClass }>
+                {
+                    options.map((option, index) => {
+                        return (
+                            <div key={ index } onClick={ event => { handleClick(index, event) }}>
+                                <input
+                                    type="checkbox"
+                                    checked={ option.selected }
+                                    readOnly={ true }
+                                />
+
+                                <label>
+                                    <span className="dropdownText">{ option.text }</span>
+                                    <span className="dropdownAmount">{ option.amount }</span>
+                                </label>
+                            </div>
+                        );
+                    })
+                }
+            </div>
+        </span>;
     }
 }
 
