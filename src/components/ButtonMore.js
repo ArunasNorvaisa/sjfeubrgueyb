@@ -1,36 +1,38 @@
 import React, { Component } from 'react';
 
-/* window.addEventListener("click", function(event) {
-    if (!event.target.matches('.menuContent')) {
-        const myDropdown = document.getElementById("dropMenu");
-        if (myDropdown.classList.contains('showMenu')) {
-            myDropdown.classList.remove('showMenu');
-        }
-    }
-}); */
-
 class ButtonMore extends Component {
 
     state = {
-        isMoreButtonClicked: false
+        dropdownVisible: false
     }
 
-    handleButtonMoreClick = event => {
-        event.preventDefault();
-        this.setState({
-            isMoreButtonClicked: !this.state.isMoreButtonClicked
-        });
+    handleMoreButtonClick = () => {
+        if (!this.state.dropdownVisible) {
+          document.addEventListener('click', this.handleOutsideClick, false);
+        } else {
+          document.removeEventListener('click', this.handleOutsideClick, false);
+        }
+        this.setState(prevState => ({
+           dropdownVisible: !prevState.dropdownVisible
+        }));
         document.getElementById("buttonMore").classList.toggle("selected");
         document.getElementById("dropMenu").classList.toggle("showMenu");
-    }
+      }
+
+      handleOutsideClick = event => {
+        if (this.node.contains(event.target)) {
+          return;
+        }
+        this.handleMoreButtonClick();
+      }
 
     render() {
         return (
-            <span id="dropdownMenu">
-                <button id="buttonMore" onClick={ event => this.handleButtonMoreClick(event) }>
+            <span id="dropdownMenu" ref={node => { this.node = node; }}>
+                <button id="buttonMore" onClick={ this.handleMoreButtonClick }>
                     <span className="buttonText">More</span>
                     <span className="buttonIcon">
-                        <i className={ this.state.isMoreButtonClicked ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
+                        <i className={ this.state.dropdownVisible ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
                         </i>
                     </span>
                 </button>
