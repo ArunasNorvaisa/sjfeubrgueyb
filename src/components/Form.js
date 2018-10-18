@@ -13,14 +13,15 @@ class Form extends Component {
             { amount: '$594', text: 'Pickup Truck', selected: false },
             { amount: '$626', text: 'Luxury', selected: false },
             { amount: '$1248', text: 'Commercial', selected: false },
-            { amount: '$1607', text: 'Convertible', selected: false },
+            { amount: '$1607', text: 'Convertible', selected: false }
         ]
     }
 
     // This is how many buttons you would like to have displayed onscreen.
     // Hardcoded in this particular case, but can be changed dynamically
-    // depending on the user's viewport. Can be even some constant + dynamic
-    // value if you would like some buttons displayed no matter what. :)
+    // depending on the user's viewport or some other criteria you'll see
+    // fit. Can be even some constant + dynamic value if you would like
+    // some buttons displayed no matter what. :)
     buttonsOnScreen = 5;
 
     handleAllButtonClick = event => {
@@ -40,12 +41,12 @@ class Form extends Component {
     handleButtonClick = (index, event) => {
         event.preventDefault();
 
-        // (Un)selecting the button
+        // (Un)selecting the button based on it's index
         this.setState(prevState => {
             let options = [...prevState.options];
             options[index] = { ...options[index], selected: !options[index].selected };
 
-            return { options };
+            return { options: options };
         });
     }
 
@@ -74,7 +75,7 @@ class Form extends Component {
             }
 
             <ButtonMore
-                /* # of checkboxes inside MORE button */
+                // # of checkboxes inside MORE button
                 options={ options.slice(this.buttonsOnScreen) }
                 handleClick={ (index, event) => { this.handleButtonClick(index + this.buttonsOnScreen, event) } }
             />

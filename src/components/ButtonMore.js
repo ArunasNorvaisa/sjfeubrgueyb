@@ -6,6 +6,7 @@ class ButtonMore extends Component {
         dropdownVisible: false
     }
 
+    // Idea shamelessly copied from https://codepen.io/graubnla/pen/EgdgZm
     handleDropdown = () => {
         this.setState(prevState => {
             if (!prevState.dropdownVisible) {
@@ -40,30 +41,24 @@ class ButtonMore extends Component {
                 onClick={ this.handleDropdown }
                 className={ buttonMoreSelected ? 'selected' : ''}
             >
-            <span className="buttonText">More</span>
-            <span className="buttonIcon">
-                <i className={ dropdownVisible ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
-                </i>
-            </span>
+                <span className="buttonText">More</span>
+                <span className="buttonIcon">
+                    <i className={ dropdownVisible ? "fas fa-chevron-up" : "fas fa-chevron-down" }>
+                    </i>
+                </span>
             </button>
 
             <div className={ menuContentClass }>
                 {
                     options.map((option, index) => {
-                        return (
-                            <div key={ index } onClick={ event => { handleClick(index, event) }}>
-                                <input
-                                    type="checkbox"
-                                    checked={ option.selected }
-                                    readOnly={ true }
-                                />
+                        return <div key={ index } onClick={ event => { handleClick(index, event) }}>
+                            <input type="checkbox" checked={ option.selected } readOnly={ true } />
 
-                                <label>
-                                    <span className="dropdownText">{ option.text }</span>
-                                    <span className="dropdownAmount">{ option.amount }</span>
-                                </label>
-                            </div>
-                        );
+                            <label>
+                                <span className="dropdownText">{ option.text }</span>
+                                <span className="dropdownAmount">{ option.amount }</span>
+                            </label>
+                        </div>;
                     })
                 }
             </div>
